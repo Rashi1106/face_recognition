@@ -15,7 +15,7 @@ Base_dir="C:\\ProgramData\\Anaconda3\\Lib\\site-packages\\cv2\\data\\"
 image_dir= os.path.join(Base_dir,"testimages")
 
 # Load the cascade
-face_cascade = cv2.CascadeClassifier('C:\\ProgramData\\Anaconda3\\Lib\\site-packages\\cv2\\data\\haarcascade_frontalface_altq.xml')
+face_cascade = cv2.CascadeClassifier('C:\\ProgramData\\Anaconda3\\Lib\\site-packages\\cv2\\data\\haarcascade_frontalface_alt2.xml')
 recognizer = cv2.face.LBPHFaceRecognizer_create()
 
 current_id=0
@@ -37,6 +37,7 @@ for root,dirs,files in os.walk(image_dir):
             id_ = label_ids[label]
             #print(label_ids)
             pil_image=Image.open(path).convert("L")#grayscale
+        
             image_array=np.array(pil_image,"uint8")#converting in numpy array
            # print(image_array)
             
@@ -52,9 +53,9 @@ for root,dirs,files in os.walk(image_dir):
                 roi= image_array[y:y+h, x:x+w]
                 x_train.append(roi)
                 y_labels.append(id_)
-                cv2.rectangle(img, (x, y), (x+w, y+h), (255, 0, 0), 2)
+                #cv2.rectangle(img, (x, y), (x+w, y+h), (255, 0, 0), 2)
             # Display the output
-                #cv2.imshow('img', img)
+                
             cv2.waitKey()
             
 #print(y_lables)
