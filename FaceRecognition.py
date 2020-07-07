@@ -11,7 +11,7 @@ import pickle
 Base_dir="C:\\ProgramData\\Anaconda3\\Lib\\site-packages\\cv2\\data\\"
 image_dir= os.path.join(Base_dir,"testimages")
 
-face_Cascade = cv2.CascadeClassifier("C:\ProgramData\Anaconda3\Lib\site-packages\cv2\data\haarcascade_frontalface_alt.xml")
+face_Cascade = cv2.CascadeClassifier("C:\ProgramData\Anaconda3\Lib\site-packages\cv2\data\haarcascade_frontalface_alt2.xml")
 
 recognizer = cv2.face.LBPHFaceRecognizer_create()
 recognizer.read("trainner.yml")
@@ -44,10 +44,17 @@ while True:
         #cv2.imwrite(img_item,roi_gray)
         id_, conf =recognizer.predict(roi_gray)
         if conf>=45 and conf <= 85:
+            name=labels[id_]
             print(id_)
             print(labels[id_])
             font = cv2.FONT_HERSHEY_SIMPLEX
-            name=labels[id_]
+            color= (255,255,255)
+            stroke = 2
+            cv2.putText(frame,name, (x,y), font, 1, color, stroke, cv2.LINE_AA)
+        else:
+            name= "Unknown"
+            print("Unknown")
+            font = cv2.FONT_HERSHEY_SIMPLEX
             color= (255,255,255)
             stroke = 2
             cv2.putText(frame,name, (x,y), font, 1, color, stroke, cv2.LINE_AA)
