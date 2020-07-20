@@ -1,17 +1,12 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Tue Jul 14 15:31:02 2020
 
-@author: admin
-"""
-import face_recognition_models as fr
+import face_recognition
 import os
 import cv2
 
 video_capture = cv2.VideoCapture(0)
 
-Known_Faces_Dir = "C:\\Users\\admin\\Desktop\\AVRN\\face_rec\\face_rec\\known_face"
-Unknown_Faces_Dir = "C:\\Users\\admin\\Desktop\\AVRN\\face_rec\\face_rec\\unknown_face"
+Known_Faces_Dir = "/home/rashi/vediobell/known_face"
+Unknown_Faces_Dir = "/home/rashi/vediobell/unknown_face"
 
 #image= cv2.imread(path)
 
@@ -22,8 +17,8 @@ known_names =[]
 for dirpath, dnames, fnames in os.walk("known_face"):
     for f in fnames:
         if f.endswith(".jpg") or f.endswith(".png"):
-            image =fr.load_image_file(f"known_face + "/" + fnames")
-            encoding = fr.face_encodings(image)[0]
+            image =face_recognition.load_image_file("known_face + "/" + fnames")
+            encoding = face_recognition.face_encodings(image)[0]
             known_face.append(encoding)
             known_names.append(name)
 
@@ -31,20 +26,20 @@ for dirpath, dnames, fnames in os.walk("known_face"):
 for dirpath, dnames, fnames in os.walk("unknown_face"):
     for f in fnames:
             print(fnames)
-            frame =fr.getfile(f"{unknown_face}/{fnames}")
-            locations = fr.face_locations(frame ,model ="cnn")
+            frame =face_recognition.load_image_file("{unknown_face}/{fnames}")
+            locations = face_recognition.face_locations(frame ,model ="cnn")
             
-            encoding = fr.face_encodings(frame,locations)
+            encoding = face_recognition.face_encodings(frame,locations)
             frame = cv2.cvtColor(frame,cv2.Color_RGB2BGR)
         
-            for face_encodings,face_locations in zip(encodigs, locations):
+            for face_encodings,face_locations in zip(encoding, locations):
                 result = face_recognition.compare_faces(known_face, face_encodings,Tolerance= 0.6)
                 match = None
-                if True in results:
-                    match = known_names[results.index(True)]
-                    print(f"Match found: {match}")
+                if True in result:
+                    match = known_names[result.index(True)]
+                    print("Match found: {match}")
                 else:
-                    print(f"Unknown")
+                    print("Unknown")
                     
                 top_left = (face_locations[3], face_locations[0])
                 bottom_right = (face_locations[1], face_locations[2])
@@ -67,22 +62,3 @@ while True:
 # When everything is done
 video_capture.release()
 cv2.destroyAllWindows()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
