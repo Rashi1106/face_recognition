@@ -18,6 +18,7 @@ ap.add_argument("-c", "--cascade", required=True,
 	help = "/home/rashi/pi-face-recognition/")
 ap.add_argument("-e", "--encodings", required=True,
 	help="/home/rashi/pi-face-recognition/")
+
 args = vars(ap.parse_args())
 
 # load the known faces and embeddings along with OpenCV's Haar
@@ -49,7 +50,7 @@ while True:
 
 	# detect faces in the grayscale frame
 	rects = detector.detectMultiScale(gray, scaleFactor=1.1, 
-		minNeighbors=5, minSize=(30, 30),
+	minNeighbors=5, minSize=(30, 30),
 		flags=cv2.CASCADE_SCALE_IMAGE)
 
 	# OpenCV returns bounding box coordinates in (x, y, w, h) order
@@ -60,11 +61,10 @@ while True:
 	# compute the facial embeddings for each face bounding box
 	encodings = face_recognition.face_encodings(rgb, boxes)
 	names = []
-
+	
+	
 	# loop over the facial embeddings
 	for encoding in encodings:
-		# attempt to match each face in the input image to our known
-		# encodings
 		matches = face_recognition.compare_faces(data["encodings"],encoding)
 		name = "Unknown"
 
@@ -75,19 +75,23 @@ while True:
 			# was matched
 			matchedIdxs = [i for (i, b) in enumerate(matches) if b]
 			counts = {}
+			
 			# loop over the matched indexes and maintain a count for
 			# each recognized face face
 			for i in matchedIdxs:
 				name = data["names"][i]
+				confidence=((i/len(matches))*100) 
 				counts[name] = counts.get(name, 0) + 1
-
+				print(confidence)    
 			# determine the recognized face with the largest number
 			# of votes (note: in the event of an unlikely tie Python
 			# will select first entry in the dictionary)
-			name = max(counts, key=counts.get)		    
+			name = max(counts, key=counts.get)
+    	    
 		# update the list of names
 		names.append(name)
-    
+		
+        
 
 	# loop over the recognized faces
 	for ((top, right, bottom, left), name) in zip(boxes, names):
